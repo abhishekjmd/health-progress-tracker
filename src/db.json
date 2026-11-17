@@ -9,30 +9,18 @@
   ],
   "checkIns": [
     {
-      "id": "checkin_1",
-      "userId": "user_1",
       "weight": 80,
-      "height": 175,
-      "sleepDuration": 7,
-      "dailySteps": 8000,
-      "waterIntake": 2.5,
-      "mood": "good",
-      "notes": "Feeling good",
-      "createdAt": "2026-11-01T10:00:00.000Z",
-      "updatedAt": "2026-11-01T10:00:00.000Z"
-    },
-    {
-      "id": "checkin_2",
-      "userId": "user_1",
-      "weight": 78.5,
-      "height": 175,
-      "sleepDuration": 7.5,
-      "dailySteps": 9500,
-      "waterIntake": 3,
+      "height": 170,
+      "sleepDuration": 8,
+      "dailySteps": 5000,
+      "waterIntake": 6,
       "mood": "excellent",
-      "notes": "Feeling more energetic",
-      "createdAt": "2026-11-08T10:00:00.000Z",
-      "updatedAt": "2026-11-08T10:00:00.000Z"
+      "notes": "Today I was feeling energetic",
+      "userId": "user_1",
+      "createdAt": "2026-11-17T08:08:32.043Z",
+      "updatedAt": "2026-11-17T08:08:32.043Z",
+      "id": "7qRVf1J74CY"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

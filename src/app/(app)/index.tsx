@@ -134,10 +134,12 @@ export default function HomeScreen() {
           </View>
         ) : (
           <>
-            {isOffline && !!error && (
+            {!!error && (
               <View style={styles.offlineBanner}>
                 <View style={styles.bannerCopy}>
-                  <Text style={styles.offlineTitle}>Showing saved data offline</Text>
+                  <Text style={styles.offlineTitle}>
+                    {isOffline ? "Showing saved data offline" : "Sync needs attention"}
+                  </Text>
                   <Text style={styles.offlineText}>{error}</Text>
                 </View>
                 <Pressable

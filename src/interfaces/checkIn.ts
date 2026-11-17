@@ -12,6 +12,27 @@ export type CheckIn = {
   updatedAt?: string;
 };
 
+export type CheckInInput = Pick<
+  CheckIn,
+  "weight" | "height" | "sleepDuration" | "dailySteps" | "waterIntake" | "mood" | "notes"
+>;
+
+export type PendingCheckInMutation =
+  | {
+      kind: "create";
+      clientId: string;
+      checkIn: Omit<CheckIn, "id">;
+    }
+  | {
+      kind: "update";
+      recordId: string;
+      data: CheckInInput;
+    }
+  | {
+      kind: "delete";
+      recordId: string;
+    };
+
 export type ProgressStatus = "improving" | "declining" | "unchanged";
 
 export type HealthProgress = {
