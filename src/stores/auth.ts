@@ -10,9 +10,12 @@ import { useCheckInsStore } from "@/stores/checkIns";
 type AuthState = {
   user: User | null;
   isLoading: boolean;
+  pendingRoute: string | null;
   hydrate: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  setPendingRoute: (route: string) => void;
+  clearPendingRoute: () => void;
 };
 
 let hydrationSequence = 0;
@@ -20,6 +23,7 @@ let hydrationSequence = 0;
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isLoading: true,
+  pendingRoute: null,
 
   async hydrate() {
     const requestId = ++hydrationSequence;
@@ -43,6 +47,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   async signOut() {
     await clearSession();
     useCheckInsStore.getState().clear();
-    set({ user: null });
+    set({ user: null, pendingRoute: null });
+  },
+
+  setPendingRoute(route) {
+    set({ pendingRoute: route });
+  },
+
+  clearPendingRoute() {
+    set({ pendingRoute: null });
   },
 }));

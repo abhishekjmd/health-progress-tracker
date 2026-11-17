@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
 import {
   ActivityIndicator,
   Modal,
@@ -18,6 +19,7 @@ import { useCheckInsStore } from "@/stores/checkIns";
 type FormMode = "create" | "edit" | null;
 
 export default function CheckInsScreen() {
+  const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const storeUserId = useCheckInsStore((state) => state.userId);
   const storedCheckIns = useCheckInsStore((state) => state.checkIns);
@@ -208,6 +210,9 @@ export default function CheckInsScreen() {
               <CheckInCard
                 key={checkIn.id}
                 checkIn={checkIn}
+                onView={() =>
+                  router.push({ pathname: "/checkin/[id]", params: { id: checkIn.id } })
+                }
                 onEdit={() => openEditForm(checkIn)}
                 onDelete={() => setPendingDelete(checkIn)}
               />
@@ -299,11 +304,12 @@ export default function CheckInsScreen() {
 
 type CardProps = {
   checkIn: CheckIn;
+  onView: () => void;
   onEdit: () => void;
   onDelete: () => void;
 };
 
-function CheckInCard({ checkIn, onEdit, onDelete }: CardProps) {
+function CheckInCard({ checkIn, onView, onEdit, onDelete }: CardProps) {
   return (
     <View style={styles.entryCard}>
       <View style={styles.entryHeader}>
@@ -337,6 +343,14 @@ function CheckInCard({ checkIn, onEdit, onDelete }: CardProps) {
       )}
 
       <View style={styles.entryActions}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`View check-in from ${formatCheckInDate(checkIn.createdAt)}`}
+          onPress={onView}
+          style={({ pressed }) => [styles.editButton, pressed && styles.pressed]}
+        >
+          <Text style={styles.editText}>View</Text>
+        </Pressable>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`Edit check-in from ${formatCheckInDate(checkIn.createdAt)}`}

@@ -8,6 +8,7 @@ import {
   cacheCheckIns,
   createRemoteCheckIn,
   deleteRemoteCheckIn,
+  fetchCheckInById,
   fetchCheckIns,
   readCachedCheckIns,
   readPendingCheckInMutations,
@@ -24,6 +25,7 @@ type CheckInState = {
   isOffline: boolean;
   error: string | null;
   load: (userId: string) => Promise<void>;
+  getById: (userId: string, id: string) => Promise<CheckIn | null>;
   create: (userId: string, data: CheckInInput) => Promise<boolean>;
   update: (userId: string, id: string, data: CheckInInput) => Promise<boolean>;
   remove: (userId: string, id: string) => Promise<boolean>;
@@ -246,6 +248,50 @@ export const useCheckInsStore = create<CheckInState>((set, get) => ({
       set({ isOffline: true, error: "Saved on this device. It will sync when you reconnect." });
       return false;
     }
+  },
+
+  async getById(userId, id) {
+    const current = get();
+    if (current.userId !== userId || current.isLoading) {
+      await get().load(userId);
+    }
+
+    const cached = get().userId === userId
+      ? get().checkIns.find((item) => item.id === id)
+      : undefined;
+    if (cached?.id.startsWith("local-")) return cached;
+
+    let checkIn: CheckIn | null;
+    try {
+      checkIn = await fetchCheckInById(id, userId);
+    } catch (error) {
+      if (cached && isNetworkError(error)) return cached;
+      throw error;
+    }
+    if (!checkIn) {
+      if (cached) {
+        const remaining = get().checkIns.filter((item) => item.id !== id);
+        set({ checkIns: remaining });
+        try {
+          await cacheCheckIns(userId, remaining);
+        } catch {
+          // The detail is still treated as missing even if the stale cache cannot be cleared.
+        }
+      }
+      return null;
+    }
+
+    const next = sortNewestFirst([
+      ...get().checkIns.filter((item) => item.id !== id),
+      checkIn,
+    ]);
+    set({ userId, checkIns: next });
+    try {
+      await cacheCheckIns(userId, next);
+    } catch {
+      // Keep the detail visible even if the local cache cannot be updated.
+    }
+    return checkIn;
   },
 
   async update(userId, id, data) {

@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckIn, CheckInInput, PendingCheckInMutation } from "@/interfaces/checkIn";
-import { requestJson } from "@/services/api";
+import { ApiError, requestJson } from "@/services/api";
 
 function cacheKey(userId: string): string {
   return `health-progress-check-ins:${userId}`;
@@ -23,6 +23,16 @@ export async function fetchCheckIns(userId: string): Promise<CheckIn[]> {
     `/checkIns?userId=${encodeURIComponent(userId)}`,
   );
   return checkIns.filter((checkIn) => checkIn.userId === userId);
+}
+
+export async function fetchCheckInById(id: string, userId: string): Promise<CheckIn | null> {
+  try {
+    const checkIn = await requestJson<CheckIn>(`/checkIns/${encodeURIComponent(id)}`);
+    return checkIn.userId === userId ? checkIn : null;
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return null;
+    throw error;
+  }
 }
 
 export async function createRemoteCheckIn(

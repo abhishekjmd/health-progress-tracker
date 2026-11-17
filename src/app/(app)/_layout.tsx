@@ -1,6 +1,5 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from "expo-router";
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import NetInfo from "@react-native-community/netinfo";
-import AppTabs from "@/components/app-tabs";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { useAuthStore } from "@/stores/auth";
@@ -30,7 +29,10 @@ export default function AppLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <AppTabs />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="checkin/[id]" />
+      </Stack>
     </ThemeProvider>
   );
 }
