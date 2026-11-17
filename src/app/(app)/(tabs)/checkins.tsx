@@ -10,8 +10,9 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { CheckInCard } from "@/components/CheckInCard";
 import { CheckInForm } from "@/components/CheckInForm";
-import { formatCheckInDate } from "@/domain/healthProgress";
+import { CheckInStateCard } from "@/components/CheckInStateCard";
 import { CheckIn, CheckInInput } from "@/interfaces/checkIn";
 import { useAuthStore } from "@/stores/auth";
 import { useCheckInsStore } from "@/stores/checkIns";
@@ -168,39 +169,21 @@ export default function CheckInsScreen() {
         )}
 
         {isWaitingForData ? (
-          <View style={styles.loadingState}>
-            <ActivityIndicator color="#1675D1" size="large" />
-            <Text style={styles.emptyBody}>Loading check-ins…</Text>
-          </View>
+          <CheckInStateCard loading message="Loading check-ins…" />
         ) : error && checkIns.length === 0 ? (
-          <View style={styles.emptyCard}>
-            <Text style={styles.emptyTitle}>Couldn’t load check-ins</Text>
-            <Text style={styles.emptyBody}>{error}</Text>
-            <Pressable
-              accessibilityRole="button"
-              onPress={() => user?.id && void load(user.id)}
-              style={({ pressed }) => [styles.retryAction, pressed && styles.pressed]}
-            >
-              <Text style={styles.retryActionText}>Retry</Text>
-            </Pressable>
-          </View>
+          <CheckInStateCard
+            title="Couldn’t load check-ins"
+            message={error}
+            actionLabel="Retry"
+            onAction={() => user?.id && void load(user.id)}
+          />
         ) : checkIns.length === 0 ? (
-          <View style={styles.emptyCard}>
-            <View style={styles.emptyIcon}>
-              <Text style={styles.emptyIconText}>＋</Text>
-            </View>
-            <Text style={styles.emptyTitle}>Start your health history</Text>
-            <Text style={styles.emptyBody}>
-              Record weight, sleep, activity, hydration, mood, and notes in one check-in.
-            </Text>
-            <Pressable
-              accessibilityRole="button"
-              onPress={openCreateForm}
-              style={({ pressed }) => [styles.retryAction, pressed && styles.pressed]}
-            >
-              <Text style={styles.retryActionText}>Create your first check-in</Text>
-            </Pressable>
-          </View>
+          <CheckInStateCard
+            title="Start your health history"
+            message="Record weight, sleep, activity, hydration, mood, and notes in one check-in."
+            actionLabel="Create your first check-in"
+            onAction={openCreateForm}
+          />
         ) : (
           <View style={styles.list}>
             <Text style={styles.listCaption}>
@@ -302,89 +285,6 @@ export default function CheckInsScreen() {
   );
 }
 
-type CardProps = {
-  checkIn: CheckIn;
-  onView: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
-};
-
-function CheckInCard({ checkIn, onView, onEdit, onDelete }: CardProps) {
-  return (
-    <View style={styles.entryCard}>
-      <View style={styles.entryHeader}>
-        <View>
-          <Text style={styles.entryDate}>{formatCheckInDate(checkIn.createdAt)}</Text>
-          <Text style={styles.entryTime}>
-            {new Date(checkIn.createdAt).toLocaleTimeString(undefined, {
-              hour: "numeric",
-              minute: "2-digit",
-            })}
-          </Text>
-        </View>
-        <View style={styles.moodBadge}>
-          <Text style={styles.moodBadgeText}>{capitalize(checkIn.mood)}</Text>
-        </View>
-      </View>
-
-      <View style={styles.metricsGrid}>
-        <Info label="Weight" value={`${checkIn.weight} kg`} />
-        <Info label="Height" value={`${checkIn.height} cm`} />
-        <Info label="Sleep" value={`${checkIn.sleepDuration} hr`} />
-        <Info label="Steps" value={checkIn.dailySteps.toLocaleString()} />
-        <Info label="Water" value={`${checkIn.waterIntake} L`} />
-      </View>
-
-      {!!checkIn.notes && (
-        <View style={styles.notesBlock}>
-          <Text style={styles.notesLabel}>Notes</Text>
-          <Text style={styles.notesText}>{checkIn.notes}</Text>
-        </View>
-      )}
-
-      <View style={styles.entryActions}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`View check-in from ${formatCheckInDate(checkIn.createdAt)}`}
-          onPress={onView}
-          style={({ pressed }) => [styles.editButton, pressed && styles.pressed]}
-        >
-          <Text style={styles.editText}>View</Text>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`Edit check-in from ${formatCheckInDate(checkIn.createdAt)}`}
-          onPress={onEdit}
-          style={({ pressed }) => [styles.editButton, pressed && styles.pressed]}
-        >
-          <Text style={styles.editText}>Edit</Text>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`Delete check-in from ${formatCheckInDate(checkIn.createdAt)}`}
-          onPress={onDelete}
-          style={({ pressed }) => [styles.deleteLink, pressed && styles.pressed]}
-        >
-          <Text style={styles.deleteText}>Delete</Text>
-        </Pressable>
-      </View>
-    </View>
-  );
-}
-
-function Info({ label, value }: { label: string; value: string }) {
-  return (
-    <View style={styles.infoItem}>
-      <Text style={styles.infoLabel}>{label}</Text>
-      <Text numberOfLines={1} style={styles.infoValue}>{value}</Text>
-    </View>
-  );
-}
-
-function capitalize(value: string): string {
-  return value ? value.charAt(0).toUpperCase() + value.slice(1) : "Not set";
-}
-
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: "#F4F7FB" },
   content: {
@@ -419,75 +319,6 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.75 },
   list: { gap: 12 },
   listCaption: { color: "#7A8699", fontSize: 12, marginBottom: 2 },
-  entryCard: {
-    padding: 16,
-    borderRadius: 17,
-    borderWidth: 1,
-    borderColor: "#E7EDF4",
-    backgroundColor: "#FFFFFF",
-  },
-  entryHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 16,
-  },
-  entryDate: { color: "#172B4D", fontSize: 16, fontWeight: "700" },
-  entryTime: { color: "#98A2B3", fontSize: 11, marginTop: 3 },
-  moodBadge: { paddingHorizontal: 11, paddingVertical: 6, borderRadius: 14, backgroundColor: "#E8F3FF" },
-  moodBadgeText: { color: "#1265B3", fontSize: 12, fontWeight: "700" },
-  metricsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
-  infoItem: { width: "30%", minWidth: 82, paddingVertical: 2 },
-  infoLabel: { color: "#7A8699", fontSize: 11 },
-  infoValue: { color: "#344054", fontSize: 14, fontWeight: "600", marginTop: 4 },
-  notesBlock: { borderTopWidth: 1, borderTopColor: "#EEF1F5", marginTop: 14, paddingTop: 12 },
-  notesLabel: { color: "#7A8699", fontSize: 11, fontWeight: "600" },
-  notesText: { color: "#475467", fontSize: 13, lineHeight: 19, marginTop: 4 },
-  entryActions: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 18,
-    borderTopWidth: 1,
-    borderTopColor: "#EEF1F5",
-    marginTop: 14,
-    paddingTop: 12,
-  },
-  editButton: { paddingVertical: 5, paddingHorizontal: 7 },
-  editText: { color: "#1675D1", fontSize: 13, fontWeight: "700" },
-  deleteLink: { paddingVertical: 5, paddingHorizontal: 7 },
-  deleteText: { color: "#B42318", fontSize: 13, fontWeight: "600" },
-  loadingState: { minHeight: 250, alignItems: "center", justifyContent: "center", gap: 12 },
-  emptyCard: {
-    alignItems: "center",
-    padding: 24,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: "#E7EDF4",
-    backgroundColor: "#FFFFFF",
-  },
-  emptyIcon: {
-    width: 50,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 16,
-    backgroundColor: "#E8F3FF",
-    marginBottom: 14,
-  },
-  emptyIconText: { color: "#1675D1", fontSize: 28, fontWeight: "400" },
-  emptyTitle: { color: "#172B4D", fontSize: 18, fontWeight: "700", textAlign: "center" },
-  emptyBody: { color: "#667085", fontSize: 14, lineHeight: 21, textAlign: "center", marginTop: 7 },
-  retryAction: {
-    minHeight: 44,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 16,
-    borderRadius: 11,
-    backgroundColor: "#1675D1",
-    marginTop: 18,
-  },
-  retryActionText: { color: "#FFFFFF", fontSize: 13, fontWeight: "700" },
   offlineBanner: {
     flexDirection: "row",
     alignItems: "center",
