@@ -5,6 +5,12 @@
       "email": "demo@health.com",
       "password": "password123",
       "name": "Demo User"
+    },
+    {
+      "name": "Abhishek",
+      "email": "abhishektiwari@gmail.co",
+      "password": "1234567890",
+      "id": "7CMjFkdA36k"
     }
   ],
   "checkIns": [
@@ -33,6 +39,32 @@
       "createdAt": "2026-11-17T08:15:04.806Z",
       "updatedAt": "2026-11-17T08:15:04.806Z",
       "id": "IApILawIxIg"
+    },
+    {
+      "weight": 90,
+      "height": 180,
+      "sleepDuration": 9,
+      "dailySteps": 1000,
+      "waterIntake": 5,
+      "mood": "excellent",
+      "notes": "",
+      "userId": "7CMjFkdA36k",
+      "createdAt": "2026-11-17T08:53:15.500Z",
+      "updatedAt": "2026-11-17T08:53:15.500Z",
+      "id": "548S2DnLa7Y"
+    },
+    {
+      "weight": 88,
+      "height": 170,
+      "sleepDuration": 6,
+      "dailySteps": 500,
+      "waterIntake": 3,
+      "mood": "low",
+      "notes": "",
+      "userId": "7CMjFkdA36k",
+      "createdAt": "2026-11-17T08:54:37.548Z",
+      "updatedAt": "2026-11-17T08:54:37.548Z",
+      "id": "EXWyqAxEDCM"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

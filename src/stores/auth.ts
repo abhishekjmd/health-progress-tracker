@@ -3,6 +3,7 @@ import { User } from "@/interfaces/auth";
 import {
   login as loginRequest,
   logout as clearSession,
+  register as registerRequest,
   restoreSession,
 } from "@/services/auth";
 import { useCheckInsStore } from "@/stores/checkIns";
@@ -13,6 +14,7 @@ type AuthState = {
   pendingRoute: string | null;
   hydrate: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (name: string, email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   setPendingRoute: (route: string) => void;
   clearPendingRoute: () => void;
@@ -42,6 +44,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   async signIn(email, password) {
     const signedInUser = await loginRequest(email, password);
     set({ user: signedInUser });
+  },
+
+  async signUp(name, email, password) {
+    const signedUpUser = await registerRequest(name, email, password);
+    set({ user: signedUpUser });
   },
 
   async signOut() {

@@ -11,9 +11,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 import { useAuthStore } from "@/stores/auth";
 
 export default function LoginScreen() {
+  const router = useRouter();
   const signIn = useAuthStore((state) => state.signIn);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -113,6 +115,16 @@ export default function LoginScreen() {
                   <Text style={styles.buttonText}>Sign in</Text>
                 )}
               </Pressable>
+              <View style={styles.signupRow}>
+                <Text style={styles.signupPrompt}>New to Health Progress Tracker?</Text>
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={() => router.push("/signup")}
+                  hitSlop={8}
+                >
+                  <Text style={styles.signupLink}>Create account</Text>
+                </Pressable>
+              </View>
             </View>
           </View>
         </ScrollView>
@@ -187,4 +199,14 @@ const styles = StyleSheet.create({
   buttonPressed: { opacity: 0.85 },
   buttonDisabled: { opacity: 0.65 },
   buttonText: { color: "#FFFFFF", fontSize: 16, fontWeight: "700" },
+  signupRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 5,
+    marginTop: 8,
+  },
+  signupPrompt: { color: "#667085", fontSize: 14 },
+  signupLink: { color: "#1675D1", fontSize: 14, fontWeight: "700" },
 });

@@ -50,6 +50,35 @@ export async function login(email: string, password: string): Promise<User> {
   return safeUser;
 }
 
+export async function register(
+  name: string,
+  email: string,
+  password: string,
+): Promise<User> {
+  const normalizedEmail = email.trim().toLowerCase();
+  const users = await requestJson<User[]>("/users");
+  const emailTaken = users.some(
+    (candidate) => candidate.email.trim().toLowerCase() === normalizedEmail,
+  );
+
+  if (emailTaken) {
+    throw new Error("An account with this email already exists.");
+  }
+
+  const createdUser = await requestJson<User>("/users", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: name.trim(),
+      email: normalizedEmail,
+      password,
+    }),
+  });
+  const safeUser = removePassword({ ...createdUser, id: String(createdUser.id) });
+  await writeSession({ user: safeUser });
+  return safeUser;
+}
+
 export async function restoreSession(): Promise<User | null> {
   try {
     const stored = await readSession();
