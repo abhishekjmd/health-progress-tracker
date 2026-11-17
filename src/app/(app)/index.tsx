@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { WeightTrendChart } from "@/components/WeightTrendChart";
 import { calculateHealthProgress, formatCheckInDate } from "@/domain/healthProgress";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuthStore } from "@/stores/auth";
 import { useCheckInsStore } from "@/stores/checkIns";
 
 const statusStyles = {
@@ -35,7 +35,8 @@ const statusStyles = {
 } as const;
 
 export default function HomeScreen() {
-  const { user, signOut } = useAuth();
+  const user = useAuthStore((state) => state.user);
+  const signOut = useAuthStore((state) => state.signOut);
   const storeUserId = useCheckInsStore((state) => state.userId);
   const storedCheckIns = useCheckInsStore((state) => state.checkIns);
   const isLoading = useCheckInsStore((state) => state.isLoading);

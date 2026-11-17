@@ -20,6 +20,19 @@
       "createdAt": "2026-11-17T08:08:32.043Z",
       "updatedAt": "2026-11-17T08:08:32.043Z",
       "id": "7qRVf1J74CY"
+    },
+    {
+      "weight": 75,
+      "height": 170,
+      "sleepDuration": 8,
+      "dailySteps": 2000,
+      "waterIntake": 5,
+      "mood": "good",
+      "notes": "Nothing just had usual day",
+      "userId": "user_1",
+      "createdAt": "2026-11-17T08:15:04.806Z",
+      "updatedAt": "2026-11-17T08:15:04.806Z",
+      "id": "IApILawIxIg"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

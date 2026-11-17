@@ -3,12 +3,12 @@ import NetInfo from "@react-native-community/netinfo";
 import AppTabs from "@/components/app-tabs";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuthStore } from "@/stores/auth";
 import { useCheckInsStore } from "@/stores/checkIns";
 
 export default function AppLayout() {
   const colorScheme = useColorScheme();
-  const { user } = useAuth();
+  const user = useAuthStore((state) => state.user);
   const syncPending = useCheckInsStore((state) => state.syncPending);
 
   useEffect(() => {

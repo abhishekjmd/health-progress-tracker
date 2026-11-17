@@ -11,10 +11,10 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuthStore } from "@/stores/auth";
 
 export default function LoginScreen() {
-  const { signIn } = useAuth();
+  const signIn = useAuthStore((state) => state.signIn);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

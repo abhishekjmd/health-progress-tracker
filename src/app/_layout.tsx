@@ -1,12 +1,18 @@
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { AuthProvider, useAuth } from "../providers/AuthProvider";
+import { useAuthStore } from "@/stores/auth";
 
 function RouteGuard() {
-  const { user, isLoading } = useAuth();
+  const user = useAuthStore((state) => state.user);
+  const isLoading = useAuthStore((state) => state.isLoading);
+  const hydrate = useAuthStore((state) => state.hydrate);
   const segments = useSegments();
   const router = useRouter();
+
+  useEffect(() => {
+    void hydrate();
+  }, [hydrate]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -31,11 +37,7 @@ function RouteGuard() {
 }
 
 export default function RootLayout() {
-  return (
-    <AuthProvider>
-      <RouteGuard />
-    </AuthProvider>
-  );
+  return <RouteGuard />;
 }
 
 const styles = StyleSheet.create({

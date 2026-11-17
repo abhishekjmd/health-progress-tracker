@@ -12,13 +12,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { CheckInForm } from "@/components/CheckInForm";
 import { formatCheckInDate } from "@/domain/healthProgress";
 import { CheckIn, CheckInInput } from "@/interfaces/checkIn";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuthStore } from "@/stores/auth";
 import { useCheckInsStore } from "@/stores/checkIns";
 
 type FormMode = "create" | "edit" | null;
 
 export default function CheckInsScreen() {
-  const { user } = useAuth();
+  const user = useAuthStore((state) => state.user);
   const storeUserId = useCheckInsStore((state) => state.userId);
   const storedCheckIns = useCheckInsStore((state) => state.checkIns);
   const isLoading = useCheckInsStore((state) => state.isLoading);
