@@ -12,11 +12,10 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CheckInForm } from "@/components/CheckInForm";
 import { formatCheckInDate } from "@/domain/healthProgress";
-import { CheckInInput } from "@/interfaces/checkIn";
+import { CheckInInput, CheckInLookupStatus } from "@/interfaces/checkIn";
+import { CheckInMetricProps } from "@/interfaces/components";
 import { useAuthStore } from "@/stores/auth";
 import { useCheckInsStore } from "@/stores/checkIns";
-
-type LookupStatus = "loading" | "found" | "not-found" | "error";
 
 export default function CheckInDetailScreen() {
   const params = useLocalSearchParams<{ id?: string | string[] }>();
@@ -28,7 +27,7 @@ export default function CheckInDetailScreen() {
   const getById = useCheckInsStore((state) => state.getById);
   const update = useCheckInsStore((state) => state.update);
   const remove = useCheckInsStore((state) => state.remove);
-  const [lookupStatus, setLookupStatus] = useState<LookupStatus>("loading");
+  const [lookupStatus, setLookupStatus] = useState<CheckInLookupStatus>("loading");
   const [lookupError, setLookupError] = useState("");
   const [retryCount, setRetryCount] = useState(0);
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -291,7 +290,7 @@ export default function CheckInDetailScreen() {
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({ label, value }: CheckInMetricProps) {
   return (
     <View style={styles.metric}>
       <Text style={styles.metricLabel}>{label}</Text>

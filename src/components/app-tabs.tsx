@@ -21,7 +21,7 @@ export default function AppTabs() {
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="checkins">
-        <NativeTabs.Trigger.Label>Check-ins</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Check-In's</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           sf={{ default: "checkmark.circle", selected: "checkmark.circle.fill" }}
           md={{ default: "checklist", selected: "checklist" }}

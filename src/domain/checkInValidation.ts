@@ -1,24 +1,8 @@
-import { CheckInInput } from "@/interfaces/checkIn";
+import { CheckInDraft, CheckInErrors, CheckInInput, CheckInValidationResult } from "@/interfaces/checkIn";
 
 export const MOOD_OPTIONS = ["excellent", "good", "okay", "low", "poor"] as const;
 
-export type CheckInDraft = {
-  weight: string;
-  height: string;
-  sleepDuration: string;
-  dailySteps: string;
-  waterIntake: string;
-  mood: string;
-  notes: string;
-};
-
-export type CheckInField = keyof CheckInDraft;
-export type CheckInErrors = Partial<Record<CheckInField, string>>;
-
-export function validateCheckIn(draft: CheckInDraft): {
-  values: CheckInInput | null;
-  errors: CheckInErrors;
-} {
+export function validateCheckIn(draft: CheckInDraft): CheckInValidationResult {
   const errors: CheckInErrors = {};
   const weight = Number(draft.weight);
   const height = Number(draft.height);

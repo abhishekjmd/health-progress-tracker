@@ -1,9 +1,6 @@
 import { create } from "zustand";
-import {
-  CheckIn,
-  CheckInInput,
-  PendingCheckInMutation,
-} from "@/interfaces/checkIn";
+import { CheckIn, CheckInInput, PendingCheckInMutation } from "@/interfaces/checkIn";
+import { CheckInState } from "@/interfaces/stores";
 import {
   cacheCheckIns,
   createRemoteCheckIn,
@@ -16,22 +13,6 @@ import {
   writePendingCheckInMutations,
 } from "@/services/checkIns";
 import { isNetworkError } from "@/services/api";
-
-type CheckInState = {
-  userId: string | null;
-  checkIns: CheckIn[];
-  isLoading: boolean;
-  isRefreshing: boolean;
-  isOffline: boolean;
-  error: string | null;
-  load: (userId: string) => Promise<void>;
-  getById: (userId: string, id: string) => Promise<CheckIn | null>;
-  create: (userId: string, data: CheckInInput) => Promise<boolean>;
-  update: (userId: string, id: string, data: CheckInInput) => Promise<boolean>;
-  remove: (userId: string, id: string) => Promise<boolean>;
-  syncPending: (userId: string) => Promise<void>;
-  clear: () => void;
-};
 
 let requestSequence = 0;
 const syncingUsers = new Set<string>();

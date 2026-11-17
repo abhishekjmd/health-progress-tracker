@@ -1,13 +1,10 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { formatCheckInDate } from "@/domain/healthProgress";
-import { CheckIn } from "@/interfaces/checkIn";
-
-type CheckInCardProps = {
-  checkIn: CheckIn;
-  onView: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
-};
+import {
+  CheckInCardActionProps,
+  CheckInCardProps,
+  CheckInMetricProps,
+} from "@/interfaces/components";
 
 export function CheckInCard({ checkIn, onView, onEdit, onDelete }: CheckInCardProps) {
   const date = formatCheckInDate(checkIn.createdAt);
@@ -60,7 +57,7 @@ export function CheckInCard({ checkIn, onView, onEdit, onDelete }: CheckInCardPr
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({ label, value }: CheckInMetricProps) {
   return (
     <View style={styles.metric}>
       <Text style={styles.metricLabel}>{label}</Text>
@@ -73,11 +70,7 @@ function Action({
   label,
   accessibilityLabel,
   onPress,
-}: {
-  label: string;
-  accessibilityLabel: string;
-  onPress: () => void;
-}) {
+}: CheckInCardActionProps) {
   return (
     <Pressable
       accessibilityRole="button"

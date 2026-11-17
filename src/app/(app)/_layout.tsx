@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { useAuthStore } from "@/stores/auth";
 import { useCheckInsStore } from "@/stores/checkIns";
+import { NetworkConnectionState } from "@/interfaces/stores";
 
 export default function AppLayout() {
   const colorScheme = useColorScheme();
@@ -13,7 +14,7 @@ export default function AppLayout() {
   useEffect(() => {
     if (!user?.id) return;
 
-    const syncWhenConnected = (state: { isConnected: boolean | null; isInternetReachable: boolean | null }) => {
+    const syncWhenConnected = (state: NetworkConnectionState) => {
       if (
         state.isConnected &&
         state.isInternetReachable !== false &&

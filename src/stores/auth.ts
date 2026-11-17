@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { User } from "@/interfaces/auth";
+import { AuthState } from "@/interfaces/stores";
 import {
   login as loginRequest,
   logout as clearSession,
@@ -7,18 +8,6 @@ import {
   restoreSession,
 } from "@/services/auth";
 import { useCheckInsStore } from "@/stores/checkIns";
-
-type AuthState = {
-  user: User | null;
-  isLoading: boolean;
-  pendingRoute: string | null;
-  hydrate: () => Promise<void>;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (name: string, email: string, password: string) => Promise<void>;
-  signOut: () => Promise<void>;
-  setPendingRoute: (route: string) => void;
-  clearPendingRoute: () => void;
-};
 
 let hydrationSequence = 0;
 

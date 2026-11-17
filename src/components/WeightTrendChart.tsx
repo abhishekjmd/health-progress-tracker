@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { LayoutChangeEvent, StyleSheet, Text, View } from "react-native";
 import Svg, { Circle, Defs, LinearGradient, Line, Path, Stop } from "react-native-svg";
-import { CheckIn } from "@/interfaces/checkIn";
+import { WeightTrendChartProps } from "@/interfaces/components";
 
 const CHART_HEIGHT = 164;
 const INSET_X = 12;
@@ -13,11 +13,7 @@ function shortDate(value: string): string {
   return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
-type Props = {
-  checkIns: CheckIn[];
-};
-
-export function WeightTrendChart({ checkIns }: Props) {
+export function WeightTrendChart({ checkIns }: WeightTrendChartProps) {
   const [width, setWidth] = useState(0);
   const values = checkIns.map((checkIn) => checkIn.weight);
   const minWeight = Math.min(...values);

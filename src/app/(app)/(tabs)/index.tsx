@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { WeightTrendChart } from "@/components/WeightTrendChart";
+import { DashboardMetricCardProps } from "@/interfaces/components";
 import { calculateHealthProgress, formatCheckInDate } from "@/domain/healthProgress";
 import { useAuthStore } from "@/stores/auth";
 import { useCheckInsStore } from "@/stores/checkIns";
@@ -242,14 +243,7 @@ export default function HomeScreen() {
   );
 }
 
-type MetricCardProps = {
-  label: string;
-  value: string;
-  detail: string;
-  valueColor?: string;
-};
-
-function MetricCard({ label, value, detail, valueColor = "#172B4D" }: MetricCardProps) {
+function MetricCard({ label, value, detail, valueColor = "#172B4D" }: DashboardMetricCardProps) {
   return (
     <View style={styles.metricCard}>
       <Text style={styles.metricLabel}>{label}</Text>

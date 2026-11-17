@@ -10,21 +10,9 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { CheckIn, CheckInInput } from "@/interfaces/checkIn";
-import {
-  CheckInDraft,
-  CheckInErrors,
-  MOOD_OPTIONS,
-  validateCheckIn,
-} from "@/domain/checkInValidation";
-
-type Props = {
-  checkIn: CheckIn | null;
-  busy: boolean;
-  error: string;
-  onCancel: () => void;
-  onSave: (values: CheckInInput) => Promise<void>;
-};
+import { CheckIn, CheckInDraft, CheckInErrors } from "@/interfaces/checkIn";
+import { CheckInFieldProps, CheckInFormProps } from "@/interfaces/components";
+import { MOOD_OPTIONS, validateCheckIn } from "@/domain/checkInValidation";
 
 function toDraft(checkIn: CheckIn | null): CheckInDraft {
   return {
@@ -38,7 +26,7 @@ function toDraft(checkIn: CheckIn | null): CheckInDraft {
   };
 }
 
-export function CheckInForm({ checkIn, busy, error, onCancel, onSave }: Props) {
+export function CheckInForm({ checkIn, busy, error, onCancel, onSave }: CheckInFormProps) {
   const [draft, setDraft] = useState(() => toDraft(checkIn));
   const [errors, setErrors] = useState<CheckInErrors>({});
 
@@ -181,15 +169,7 @@ export function CheckInForm({ checkIn, busy, error, onCancel, onSave }: Props) {
   );
 }
 
-type FieldProps = {
-  label: string;
-  value: string;
-  error?: string;
-  keyboardType: "decimal-pad" | "number-pad";
-  onChangeText: (value: string) => void;
-};
-
-function Field({ label, value, error, keyboardType, onChangeText }: FieldProps) {
+function Field({ label, value, error, keyboardType, onChangeText }: CheckInFieldProps) {
   return (
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>

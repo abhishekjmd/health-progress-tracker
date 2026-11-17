@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckIn, CheckInInput, PendingCheckInMutation } from "@/interfaces/checkIn";
+import { CheckInTimestamps } from "@/interfaces/checkIn";
 import { ApiError, requestJson } from "@/services/api";
 
 function cacheKey(userId: string): string {
@@ -38,7 +39,7 @@ export async function fetchCheckInById(id: string, userId: string): Promise<Chec
 export async function createRemoteCheckIn(
   userId: string,
   data: CheckInInput,
-  timestamps?: { createdAt: string; updatedAt?: string },
+  timestamps?: CheckInTimestamps,
 ): Promise<CheckIn> {
   const now = new Date().toISOString();
   return requestJson<CheckIn>(

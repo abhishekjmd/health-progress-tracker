@@ -13,11 +13,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { CheckInCard } from "@/components/CheckInCard";
 import { CheckInForm } from "@/components/CheckInForm";
 import { CheckInStateCard } from "@/components/CheckInStateCard";
-import { CheckIn, CheckInInput } from "@/interfaces/checkIn";
+import { CheckIn, CheckInFormMode, CheckInInput } from "@/interfaces/checkIn";
 import { useAuthStore } from "@/stores/auth";
 import { useCheckInsStore } from "@/stores/checkIns";
-
-type FormMode = "create" | "edit" | null;
 
 export default function CheckInsScreen() {
   const router = useRouter();
@@ -32,7 +30,7 @@ export default function CheckInsScreen() {
   const create = useCheckInsStore((state) => state.create);
   const update = useCheckInsStore((state) => state.update);
   const remove = useCheckInsStore((state) => state.remove);
-  const [formMode, setFormMode] = useState<FormMode>(null);
+  const [formMode, setFormMode] = useState<CheckInFormMode>(null);
   const [selectedCheckIn, setSelectedCheckIn] = useState<CheckIn | null>(null);
   const [pendingDelete, setPendingDelete] = useState<CheckIn | null>(null);
   const [isSaving, setIsSaving] = useState(false);

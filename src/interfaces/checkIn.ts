@@ -45,3 +45,25 @@ export type HealthProgress = {
   status: ProgressStatus;
   sortedCheckIns: CheckIn[];
 };
+
+export type CheckInDraft = {
+  weight: string;
+  height: string;
+  sleepDuration: string;
+  dailySteps: string;
+  waterIntake: string;
+  mood: string;
+  notes: string;
+};
+
+export type CheckInField = keyof CheckInDraft;
+export type CheckInErrors = Partial<Record<CheckInField, string>>;
+export type CheckInValidationResult = {
+  values: CheckInInput | null;
+  errors: CheckInErrors;
+};
+
+export type CheckInFormMode = "create" | "edit" | null;
+export type CheckInLookupStatus = "loading" | "found" | "not-found" | "error";
+
+export type CheckInTimestamps = { createdAt: string; updatedAt?: string };

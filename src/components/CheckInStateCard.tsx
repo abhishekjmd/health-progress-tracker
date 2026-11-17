@@ -1,12 +1,5 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
-
-type CheckInStateCardProps = {
-  title?: string;
-  message: string;
-  actionLabel?: string;
-  onAction?: () => void;
-  loading?: boolean;
-};
+import { CheckInStateCardProps } from "@/interfaces/components";
 
 export function CheckInStateCard({ title, message, actionLabel, onAction, loading = false }: CheckInStateCardProps) {
   if (loading) {
